@@ -2,6 +2,8 @@
 
 A simple and intuitive zoom mod for Minecraft that allows you to zoom in and out with ease.
 
+![EzZoom Demo](media/demo.GIF)
+
 ![Minecraft Version](https://img.shields.io/badge/Minecraft-1.21.7-brightgreen)
 ![Mod Loader](https://img.shields.io/badge/Mod%20Loader-Fabric-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -45,11 +47,6 @@ A simple and intuitive zoom mod for Minecraft that allows you to zoom in and out
 
 ### Keybind Configuration
 You can change the zoom key in Minecraft's controls settings under the "EzZoom" category.
-
-## Demo
-
-![EzZoom Demo](media/demo.GIF)
-
 
 ## Building from Source
 
