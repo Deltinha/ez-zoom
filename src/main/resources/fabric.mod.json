@@ -3,15 +3,14 @@
 	"id": "ezzoom",
 	"version": "${version}",
 	"name": "EzZoom",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A simple and intuitive zoom mod for Minecraft that allows you to zoom in and out with ease.",
 	"authors": [
 		"Me!"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Deltinha/ez-zoom"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/ezzoom/icon.png",
 	"environment": "*",
 	"entrypoints": {
