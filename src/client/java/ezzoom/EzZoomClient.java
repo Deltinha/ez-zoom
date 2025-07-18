@@ -18,7 +18,11 @@ public class EzZoomClient implements ClientModInitializer {
 					GLFW.GLFW_KEY_V,
 					"category.ezzoom"));
 
-	private static final double ZOOM_LEVEL = 3.0;
+	private static final double DEFAULT_ZOOM_LEVEL = 3.0;
+	private static final double MIN_ZOOM_LEVEL = 1.0;
+	private static final double MAX_ZOOM_LEVEL = 50.0;
+
+	private static Double currentZoomLevel = null;
 	private static Double defaultMouseSensitivity = null;
 	private static boolean wasZoomingLastTick = false;
 
@@ -30,8 +34,10 @@ public class EzZoomClient implements ClientModInitializer {
 			if (isCurrentlyZooming != wasZoomingLastTick) {
 				if (isCurrentlyZooming) {
 					saveMouseSensitivity();
+					currentZoomLevel = DEFAULT_ZOOM_LEVEL;
 				} else {
 					restoreMouseSensitivity();
+					currentZoomLevel = null;
 				}
 				wasZoomingLastTick = isCurrentlyZooming;
 			}
@@ -42,15 +48,41 @@ public class EzZoomClient implements ClientModInitializer {
 		});
 	}
 
+	private static boolean isZoomKeyPressed() {
+		return zoomKey.isPressed();
+	}
+
+	public static boolean shouldPreventHotbarScrolling() {
+		return isZoomKeyPressed();
+	}
+
 	public static float applyZoom(float fov) {
-		if (isZoomKeyPressed()) {
-			return (float) (fov / ZOOM_LEVEL);
+		if (isZoomKeyPressed() && currentZoomLevel != null) {
+			return (float) (fov / currentZoomLevel);
 		}
 		return fov;
 	}
 
-	private static boolean isZoomKeyPressed() {
-		return zoomKey.isPressed();
+	public static void handleMouseScroll(double scrollAmount) {
+		if (!isZoomKeyPressed()) {
+			return;
+		}
+
+		if (currentZoomLevel == null) {
+			currentZoomLevel = DEFAULT_ZOOM_LEVEL;
+		}
+
+		if (scrollAmount > 0) {
+			currentZoomLevel *= 1.1;
+		} else if (scrollAmount < 0) {
+			currentZoomLevel *= 0.9;
+		}
+
+		currentZoomLevel = clampZoomLevel(currentZoomLevel);
+	}
+
+	public static Double clampZoomLevel(Double zoomLevel) {
+		return Math.max(MIN_ZOOM_LEVEL, Math.min(MAX_ZOOM_LEVEL, zoomLevel));
 	}
 
 	private static void saveMouseSensitivity() {
@@ -61,10 +93,10 @@ public class EzZoomClient implements ClientModInitializer {
 	}
 
 	private static void applyZoomSensitivity() {
-		if (defaultMouseSensitivity != null) {
+		if (defaultMouseSensitivity != null && currentZoomLevel != null) {
 			MinecraftClient client = MinecraftClient.getInstance();
 			SimpleOption<Double> mouseSensitivitySetting = client.options.getMouseSensitivity();
-			mouseSensitivitySetting.setValue(defaultMouseSensitivity / ZOOM_LEVEL);
+			mouseSensitivitySetting.setValue(defaultMouseSensitivity / currentZoomLevel);
 		}
 	}
 
@@ -73,6 +105,7 @@ public class EzZoomClient implements ClientModInitializer {
 			MinecraftClient client = MinecraftClient.getInstance();
 			SimpleOption<Double> mouseSensitivitySetting = client.options.getMouseSensitivity();
 			mouseSensitivitySetting.setValue(defaultMouseSensitivity);
+			defaultMouseSensitivity = null;
 		}
 	}
 }
