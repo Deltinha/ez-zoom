@@ -54,8 +54,8 @@ You can change the zoom key in Minecraft's controls settings under the "EzZoom" 
 ## Building from Source
 
 ```bash
-git clone https://github.com/your-username/EzZoom.git
-cd EzZoom
+git clone https://github.com/Deltinha/ez-zoom.git
+cd ez-zoom
 ./gradlew build
 ```
 
